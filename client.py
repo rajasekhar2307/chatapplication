@@ -2,7 +2,7 @@ import socket
 import threading
 
 HEADER = 10
-
+IP = socket.gethostbyname(socket.gethostname())
 
 
 
@@ -21,7 +21,7 @@ def send_message(connection):
 		message = input('->')
 
 		if not message:
-			return 
+			return
 		message = message.encode('utf-8')
 		message_header = f"{len(message):<{HEADER}}".encode('utf-8')
 		connection.send(message_header + message)
@@ -31,7 +31,7 @@ def send_message(connection):
 def Main():
 
 	client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	client_socket.connect(('localhost',7770))
+	client_socket.connect((IP,7770))
 
 	rv_thread = threading.Thread(target = recieve_message, args=(client_socket,))
 	sm_thread = threading.Thread(target = send_message, args=(client_socket,))
