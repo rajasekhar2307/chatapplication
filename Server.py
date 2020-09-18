@@ -5,7 +5,7 @@ import threading
 
 
 HEADER = 10
-IP = "localhost"
+IP = socket.gethostbyname(socket.gethostname())
 PORT = 7770
 
 
@@ -22,23 +22,23 @@ def conn_clients(socket):
 		msg = "Connected with the server"
 		print(f'Active Conn: {len(connections)-1}')
 		msg = f'{len(msg):<{HEADER}}'+msg
-		
+
 
 		conn.send(bytes(msg,'utf-8'))
-		
+
 		sm_thread = threading.Thread(target = send_message, args=(conn,))
 		recv_thread = threading.Thread(target = recieve_message, args=(conn,))
 		sm_thread.start()
-		recv_thread.start()		
+		recv_thread.start()
 
-		
+
 
 def send_message(conn):
 	while True:
 		message = input('->')
 
 		if not message:
-			return 
+			return
 		message = message.encode('utf-8')
 		message_header = f"{len(message):<{HEADER}}".encode('utf-8')
 		conn.send(message_header + message)
